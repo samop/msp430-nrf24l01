@@ -128,7 +128,9 @@ P1OUT |= 0x10;
 }
 
 void CLR_CE(){
+P1OUT &=~0x08;
 }
 
 void SET_CE(){
+P1OUT |=0x08;
 }
