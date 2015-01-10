@@ -7,13 +7,12 @@
 
 volatile unsigned int i;
 volatile unsigned int cnt;
-
 unsigned char is_on;
-
 /* first function that receives code for on/off the light. Never exists! */
 void legacy_receiver(){
 	//requred vars:
 	UINT8 sta;
+extern int angle;
 #define BUFFER_LENGTH 1
     	UINT8 g_RFSendBuff[BUFFER_LENGTH];
 
@@ -32,11 +31,22 @@ void legacy_receiver(){
 		while (i != 0); /* Is this just a pause to settle down the receiver? */
 //receive code:
    sta = RF_GET_STATUS();      //Get the RF status
- if(sta & STATUS_RX_DR)    //Receive OK?
-       {
-  rlen = RF_ReadRxPayload( (UINT8 *)&g_RFSendBuff, BUFFER_LENGTH );
-		P2OUT ^=TRIAC;	
+ if(sta & STATUS_RX_DR){    //Receive OK?
+  	rlen = RF_ReadRxPayload( (UINT8 *)&g_RFSendBuff, BUFFER_LENGTH );
+	//	P2OUT ^=TRIAC;	
+	if((char)g_RFSendBuff[0]=='a'){
+		if(angle<=MIN_ANGLE) angle=MIN_ANGLE;
+		else
+		angle-=ANGLE_STEP;
 	}
+	if((char)g_RFSendBuff[0]=='b'){
+		if(angle>MAX_ANGLE) angle=MAX_ANGLE;
+		else
+		angle+=ANGLE_STEP;
+
+	}	
+	
+}
 
   if( sta & STATUS_MAX_RT )  //Send fail?
         {
