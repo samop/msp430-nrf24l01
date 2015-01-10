@@ -1,19 +1,17 @@
-#include "msp430x20x3.h"
+#include "msp430g2231.h"
 #include "bk2421.h"
 #include <msp430.h>
 #include "spi.h"
 #include "types.h"
-#define TRIAC 1<<6; //P2.6
-#define ZEROCROSS 1<<7; //P2.7
+#include "project.h"
+#include "protocol.h"
 
-volatile unsigned int i;
-volatile unsigned int cnt;
 volatile unsigned int output;
-unsigned char is_on;
 void SPI_Init(void);
 void Interrupt_init(void);
 void main(void)
 {
+volatile int i;
 	//Disable watchdog
 	WDTCTL = WDTPW + WDTHOLD;
 	//set the clock
@@ -30,9 +28,9 @@ void main(void)
 /* P1.4 : CSN */
 	P1OUT &=~0x01;
 	P1DIR = 0x79;                                //P1.5 is SCLK, P1.6 = SDO, P1.7 = SDI, P1.6=CS, P1.0 = LED
-//DIS	SPI_Init();
+	SPI_Init();
 /* Initialize RF module */
-//DIS	BK2421_Initialize();
+	BK2421_Initialize();
 
 /* Triac control and zero crossing detection is on port 2 */
 /* P2.6 : Triac control output */
@@ -47,12 +45,11 @@ void main(void)
 
 
 /* Will be using interrupts. Here we initialize them */
-//DIS	Interrupt_init();
+	Interrupt_init();
 
 
-
+	legacy_receiver();
 /* endless loop, just in case */
-	volatile int i;
 	while(1){
 		for(i=1;i<1000;i++);
 		P2OUT ^=TRIAC;	
