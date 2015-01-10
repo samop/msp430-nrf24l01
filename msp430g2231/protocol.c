@@ -33,7 +33,7 @@ extern int angle;
    sta = RF_GET_STATUS();      //Get the RF status
  if(sta & STATUS_RX_DR){    //Receive OK?
   	rlen = RF_ReadRxPayload( (UINT8 *)&g_RFSendBuff, BUFFER_LENGTH );
-	//	P2OUT ^=TRIAC;	
+//		P2OUT ^=TRIAC;	
 	if((char)g_RFSendBuff[0]=='a'){
 		if(angle<=MIN_ANGLE) angle=MIN_ANGLE;
 		else

@@ -6,13 +6,15 @@
 #include "project.h"
 #include "protocol.h"
 #include "interrupt.h"
+//#include "structure.h"
+//#include "Library/CTS_Layer.h"
 void SPI_Init(void);
 
 //here is global, global variable.
 unsigned int output;
 int angle=MAX_ANGLE;
 
-
+extern const struct Sensor slider;
 void main(void)
 {
 volatile int i;
@@ -48,6 +50,12 @@ volatile int i;
 
 
 	legacy_receiver(); //never returns!
+
+
+ // establish baseline
+// TI_CAPT_Init_Baseline(&slider);
+// TI_CAPT_Update_Baseline(&slider,5);
+
 
 /* endless loop, just in case */
 	while(1){

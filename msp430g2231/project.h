@@ -8,7 +8,7 @@
 
 #define MIN_ANGLE 100
 #define MAX_ANGLE 8800
-#define ANGLE_STEP 400
+#define ANGLE_STEP 800
 
 
 
