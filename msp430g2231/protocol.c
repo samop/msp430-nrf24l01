@@ -12,7 +12,7 @@ unsigned char is_on;
 void legacy_receiver(){
 	//requred vars:
 	UINT8 sta;
-extern int angle;
+extern unsigned int angle;
 #define BUFFER_LENGTH 1
     	UINT8 g_RFSendBuff[BUFFER_LENGTH];
 
@@ -40,7 +40,11 @@ extern int angle;
 		angle-=ANGLE_STEP;
 	}
 	if((char)g_RFSendBuff[0]=='b'){
-		if(angle>MAX_ANGLE) angle=MAX_ANGLE;
+		if(angle>MAX_ANGLE) {
+			angle=MAX_ANGLE;
+			//a trick. we turn on the triac to get interrupt
+			P2OUT |=TRIAC;
+		}
 		else
 		angle+=ANGLE_STEP;
 

@@ -11,10 +11,8 @@
 void SPI_Init(void);
 
 //here is global, global variable.
-unsigned int output;
-int angle=MAX_ANGLE;
+unsigned int angle=MAX_ANGLE;
 
-extern const struct Sensor slider;
 void main(void)
 {
 volatile int i;
@@ -47,16 +45,7 @@ volatile int i;
 
 /* Will be using interrupts. Here we initialize them */
 	Interrupt_init();
-
-
 	legacy_receiver(); //never returns!
-
-
- // establish baseline
-// TI_CAPT_Init_Baseline(&slider);
-// TI_CAPT_Update_Baseline(&slider,5);
-
-
 /* endless loop, just in case */
 	while(1){
 		//for(i=1;i<1;i++);
