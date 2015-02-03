@@ -3,8 +3,8 @@
 #include <msp430.h>
 #include "spi.h"
 #include "types.h"
-#define TRIAC 1<<6; //P2.6
-#define ZEROCROSS 1<<7; //P2.7
+#define TRIAC 1<<6 //P2.6
+#define ZEROCROSS 1<<7 //P2.7
 
 volatile unsigned int i;
 volatile unsigned int cnt;
@@ -38,7 +38,7 @@ void main(void)
 /* P2.6 : Triac control output */
 /* P2.7 : Zero crossing detector */
 	//port 2 requires selecting right functionality
-	P2SEL &=~(TRIAC+ZEROCROSS); //sets I/O function to P2.6 and P2.7
+	P2SEL &=~ (TRIAC+ZEROCROSS) ; //sets I/O function to P2.6 and P2.7
 
 	P2OUT |=TRIAC;
 	P2DIR |=TRIAC;
