@@ -8,11 +8,6 @@
 #include "interrupt.h"
 void SPI_Init(void);
 
-//here is global, global variable.
-unsigned int output;
-int angle=MAX_ANGLE;
-
-
 void main(void)
 {
 volatile int i;
