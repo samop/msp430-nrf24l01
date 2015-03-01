@@ -3,8 +3,8 @@
 #include <msp430.h>
 #include "spi.h"
 #include "types.h"
-#define TRIAC 1<<6; //P2.6
-#define ZEROCROSS 1<<7; //P2.7
+#define TRIAC 1<<6 //P2.6
+#define ZEROCROSS 1<<7 //P2.7
 
 volatile unsigned int i;
 volatile unsigned int cnt;
