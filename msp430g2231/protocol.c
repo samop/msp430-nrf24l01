@@ -17,39 +17,31 @@ void legacy_receiver(){
 	UINT8 rlen;
 	for (;;)
 	{
-/*		i = 71*100;
-		do (i--);
-		while (i != 0); */
-//		P1OUT ^= 0x01;
 		i = 75;
 		do (i--);
 		while (i != 0); /* Is this just a pause to settle down the receiver? */
-//receive code:
-   sta = RF_GET_STATUS();      //Get the RF status
- if(sta & STATUS_RX_DR){    //Receive OK?
-  	rlen = RF_ReadRxPayload( (UINT8 *)&g_RFSendBuff, BUFFER_LENGTH );
-	//	P2OUT ^=TRIAC;	
-	if((char)g_RFSendBuff[0]=='a'){
-		P2OUT |=TRIAC;
-	}
-	if((char)g_RFSendBuff[0]=='b'){
-		P2OUT &=~TRIAC;
-	}	
-	if((char)g_RFSendBuff[0]=='c'){
-		P2OUT ^=TRIAC;
-	}	
-	
-}
 
-  if( sta & STATUS_MAX_RT )  //Send fail?
-        {
-            RF_FLUSH_TX();  //Flush the TX FIFO 
-        }
+//receive code:
+   		sta = RF_GET_STATUS();      //Get the RF status
+		if(sta & STATUS_RX_DR){    //Receive OK?
+  		rlen = RF_ReadRxPayload( (UINT8 *)&g_RFSendBuff, BUFFER_LENGTH );
+		//	P2OUT ^=TRIAC;	
+		if((char)g_RFSendBuff[0]=='a'){
+			P2OUT |=TRIAC;
+		}
+		if((char)g_RFSendBuff[0]=='b'){
+			P2OUT &=~TRIAC;
+		}	
+		if((char)g_RFSendBuff[0]=='c'){
+			P2OUT ^=TRIAC;
+		}	
+	
+	}
+
+  	if( sta & STATUS_MAX_RT )  //Send fail?
+        	{
+            	RF_FLUSH_TX();  //Flush the TX FIFO 
+        	}
         RF_CLR_IRQ( sta );  //Clear the IRQ flag
 	}
-
-
-
-
 }
-
