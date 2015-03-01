@@ -1,0 +1,35 @@
+/*
+** This CSS code is not done to the web.
+** The automatic HTML and CSS code are only a helper.
+*/
+
+body {
+  text-align: center;
+}
+
+#element-1 {
+  top: 142px;
+  height: 270px;
+  width: 290px;
+  background: url("prostor.png") no-repeat;
+  position: absolute;
+  left: 80px;
+}
+
+#element-2 {
+  top: 142px;
+  height: 320px;
+  width: 280px;
+  background: url("prostor-01.png") no-repeat;
+  position: absolute;
+  left: 370px;
+}
+
+#element-3 {
+  top: 412px;
+  height: 110px;
+  width: 290px;
+  background: url("prostor-02.png") no-repeat;
+  position: absolute;
+  left: 80px;
+}
