@@ -1,4 +1,4 @@
-#include "msp430g2231.h"
+#include "msp430g2211.h"
 #include "bk2421.h"
 #include <msp430.h>
 #include "spi.h"
