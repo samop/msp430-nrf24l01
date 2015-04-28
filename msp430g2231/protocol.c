@@ -41,16 +41,16 @@ void legacy_receiver(){
 		}
 		if((char)g_RFSendBuff[0]=='1'){
 			angle=500;
-			on=!on;
+			on=1;
 		}
 		if((char)g_RFSendBuff[0]=='5'){
 			angle=4000;
-			on=!on;
+			on=1;
 		}
 			
 		if((char)g_RFSendBuff[0]=='9'){
 			angle=8000;
-			on=!on;
+			on=1;
 		}
 	
 	}

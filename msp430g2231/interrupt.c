@@ -64,14 +64,14 @@ __interrupt timerA(void){
 	volatile int i;
 	//P1OUT ^=LED;
 	if(cap){
-	if(on)	P1OUT&=~TRIAC;
+		if(on)	P2OUT&=~TRIAC;
 		TACCR0+=angle;
 		compareMode(); 
 	} else {
 		if(angle!=0) {
-		if(on)	P1OUT|=TRIAC;
+			if(on)	P2OUT|=TRIAC;
 			for(i=1;i<15;i++);
-		if(on)	P1OUT&=~TRIAC;
+			if(on)	P2OUT&=~TRIAC;
 			if(timer_mode==0){
 				timer_mode=1;
 				TACCR0 += HALF_PERIOD;
