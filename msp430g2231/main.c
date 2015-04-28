@@ -6,6 +6,9 @@
 #include "project.h"
 #include "protocol.h"
 #include "interrupt.h"
+
+extern volatile long int angle;
+
 void SPI_Init(void);
 
 void main(void)
@@ -33,14 +36,18 @@ volatile int i;
 /* Triac control and zero crossing detection is on port 2 */
 /* P2.6 : Triac control output */
 /* P2.7 : Zero crossing detector */
-	P2SEL &=~(TRIAC+ZEROCROSS); //sets I/O function to P2.6 and P2.7
+	P2SEL &=~(TRIAC); //sets I/O function
 	P2OUT &=~TRIAC;
 	P2DIR |=TRIAC;
-	P2DIR &=~ZEROCROSS;
+
+	P1SEL |=ZEROCROSS; //sets Capture function
+	P1DIR &=~ZEROCROSS;
 
 /* Will be using interrupts. Here we initialize them */
 	Interrupt_init();
 
+	angle=2000;
+	captureMode();
 
 	legacy_receiver(); //never returns!
 
