@@ -46,7 +46,7 @@ volatile int i;
 /* Will be using interrupts. Here we initialize them */
 	Interrupt_init();
 
-	angle=8000;
+	angle=6000;
 	captureMode();
 
 	legacy_receiver(); //never returns!
