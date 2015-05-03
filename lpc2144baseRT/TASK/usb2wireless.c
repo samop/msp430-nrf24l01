@@ -30,7 +30,8 @@ signed portBASE_TYPE retval;
     	buffer[0]='0';
 	retval=usbserGetChar(buffer, 10);
 //	if(retval==pdTRUE) usbserPutChar(buffer[0], 1);
-	if(retval==pdTRUE&& (buffer[0]=='a' || buffer[0]=='b' || buffer[0]=='c')){	
+	if(retval==pdTRUE//&& (buffer[0]=='a' || buffer[0]=='b' || buffer[0]=='c')
+		){	
 			SwitchToTxMode();
 			CLR_CE();
 			SPI_Write_Buf(WR_TX_PLOAD, (U8 *)&buffer, 1); // Writes data to TX FIFO
