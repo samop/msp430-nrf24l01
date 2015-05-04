@@ -43,6 +43,13 @@ void legacy_receiver(){
 		if((char)g_RFSendBuff[0]=='e'){
 			state.softstart=FALSE;
 		}
+		if((char)g_RFSendBuff[0]=='f'){
+		if(state.speed<500)	state.speed+=10;
+		}
+		if((char)g_RFSendBuff[0]=='g'){
+		if(state.speed>10)	state.speed-=10;
+		}
+		
 		
 		if((char)g_RFSendBuff[0]>'0' && (char)g_RFSendBuff[0]<'a'){
 		//49 levels

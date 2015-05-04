@@ -79,15 +79,15 @@ __interrupt timerA(void){
 
 //rewrite. Do a check if abs(state.angle-state.target_angle)<state.speed then....
 	/* soft start code */
-/*	if(state.angle!=state.target_angle){
+	if(state.angle!=state.target_angle){
 		if(state.angle>(state.target_angle+state.speed)){
 			state.angle-=state.speed;
 		}
 		else if(state.angle<(state.target_angle-state.speed)){
 			state.angle+=state.speed;
 		}
-		if(state.angle>=MAX_ANGLE && state.power==ON) state.power==OFF;
-		if(state.angle<MAX_ANGLE-state.speed && state.power==OFF) state.power==ON;
+		if(state.angle>=MAX_ANGLE-state.speed && state.power==ON) state.power=OFF;
+/*		if(state.angle<MAX_ANGLE-state.speed && state.power==OFF) state.power=ON; */
 	}
-*/
+
 }
