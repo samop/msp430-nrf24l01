@@ -7,7 +7,9 @@
 #include "protocol.h"
 #include "interrupt.h"
 
-extern volatile long int angle;
+st_state state;
+
+//extern volatile long int angle;
 
 void SPI_Init(void);
 
@@ -33,9 +35,7 @@ volatile int i;
 /* Initialize RF module */
 	BK2421_Initialize();
 
-/* Triac control and zero crossing detection is on port 2 */
-/* P2.6 : Triac control output */
-/* P2.7 : Zero crossing detector */
+/* Triac control and zero crossing detection  */
 	P2SEL &=~(TRIAC); //sets I/O function
 	P2OUT &=~TRIAC;
 	P2DIR |=TRIAC;
@@ -43,20 +43,24 @@ volatile int i;
 	P1SEL |=ZEROCROSS; //sets Capture function
 	P1DIR &=~ZEROCROSS;
 
-/* Will be using interrupts. Here we initialize them */
+/*set initial state of the device */
+	state.angle=6000; //dim lights
+	state.target_angle=state.angle;
+	state.preset_angle=state.angle;
+	state.power=OFF; //powered off
+	state.cap=TIMERCAP; //prepare for capture mode
+	state.timer_mode=TIMERIDLE; //timer will be idle after capture happened
+	state.speed=5; //soft start/stop speed.
+	state.softstart=FALSE;
+/* Will be using interrupts for switch */
 	Interrupt_init();
 
-	angle=6000;
 	captureMode();
 
 	legacy_receiver(); //never returns!
 
 /* endless loop, just in case */
-	while(1){
-		//for(i=1;i<1;i++);
-		//P2OUT ^=TRIAC;	
-		//P2OUT=(P2OUT & ~TRIAC) | (P2IN&ZEROCROSS)>>1 ;
-	}
+	while(1);
 }
 
 void SPI_Init(void)

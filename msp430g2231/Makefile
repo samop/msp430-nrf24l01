@@ -5,8 +5,8 @@ MCU=msp430g2231
 CFLAGS=-Os -mmcu=$(MCU) -I.
 PROG=mspdebug
 
-all: main.o interrupt.o protocol.o spi.o BK2421_TxRx.o bk2421_initialize.o
-	$(CC) $(CFLAGS) main.o interrupt.o protocol.o spi.o BK2421_TxRx.o bk2421_initialize.o -o main.elf
+all: main.o interrupt.o protocol.o spi.o BK2421_TxRx.o bk2421_initialize.o softstartstop.o
+	$(CC) $(CFLAGS) main.o interrupt.o protocol.o spi.o BK2421_TxRx.o bk2421_initialize.o softstartstop.o -o main.elf
 
 #main.o:
 #	$(CC) $(CFLAGS) main.c

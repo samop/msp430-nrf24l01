@@ -5,15 +5,13 @@
 #include "types.h"
 #include "project.h"
 #include "protocol.h"
+#include "softstartstop.h"
 
+extern st_state state;
 
-int cap=0;
-int timer_mode=0;
-volatile char on=0;
-volatile long int angle;
 void captureMode(void)
 {
-	cap=1;
+	state.cap=TIMERCAP;
 	TACTL =TACLR; // Clear
 	TACTL = TASSEL_2 + MC_2+TAIE; // SMCLK, contmode
 	TACCTL0 = CM_1+CCIS_0+SCS+CAP+CCIE;
@@ -23,7 +21,7 @@ void captureMode(void)
 
 void compareMode(void)
 {
-	cap=0;
+	state.cap=TIMERCOMP;
 	//TACTL = TASSEL_2 + MC_2+TAIE;                  // SMCLK, contmode
 	TACCTL0 = OUTMOD_4+CCIE;
   	_BIS_SR(GIE);                 // enable interrupt
@@ -50,8 +48,8 @@ void Interrupt_init(void){
 #pragma vector = PORT2_VECTOR
 __interrupt void PORT2_ISR(void) {
 //	P2OUT ^=TRIAC;
-	if(on) on=0;
-	else on=1;
+	if(state.power) power_off();
+	else power_on();
 do { //debouncing ;)
 	P2IFG=0;
 } while(P2IFG!=0);
@@ -61,30 +59,35 @@ do { //debouncing ;)
 
 #pragma vector=TIMERA0_VECTOR
 __interrupt timerA(void){
-	volatile int i;
-	//P1OUT ^=LED;
-	if(cap){
-		if(on)	P2OUT&=~TRIAC;
-		TACCR0+=angle;
-		compareMode(); 
+	volatile int i; // for for loop
+	if(state.cap==TIMERCAP){
+		if(state.power)	P2OUT&=~TRIAC;
+		TACCR0+=state.angle;
+		compareMode();  //switch to compare mode after zero cross has been captured
 	} else {
-		if(angle!=0) {
-			if(on)	P2OUT|=TRIAC;
-			for(i=1;i<15;i++);
-			if(on)	P2OUT&=~TRIAC;
-			if(timer_mode==0){
-				timer_mode=1;
-				TACCR0 += HALF_PERIOD;
-			} else {
-				timer_mode=0;
-				captureMode();
-			} 
-		}
-		else
-		{
-			timer_mode=0; // reset timer mode.
-			captureMode(); //go back to edge detect.
-		}
+		if(state.power)	P2OUT|=TRIAC;
+		for(i=1;i<15;i++); // wait a bit for triac to open for sure
+		if(state.power)	P2OUT&=~TRIAC;
+		if(state.timer_mode==TIMERIDLE){
+			state.timer_mode=TIMERWAIT; //wait for another half period
+			TACCR0 += HALF_PERIOD;
+		} else {
+			state.timer_mode=TIMERIDLE; //ok, the other half period found return to idle state
+			captureMode(); //go to capture mode
+		} 
 	}
 
+//rewrite. Do a check if abs(state.angle-state.target_angle)<state.speed then....
+	/* soft start code */
+/*	if(state.angle!=state.target_angle){
+		if(state.angle>(state.target_angle+state.speed)){
+			state.angle-=state.speed;
+		}
+		else if(state.angle<(state.target_angle-state.speed)){
+			state.angle+=state.speed;
+		}
+		if(state.angle>=MAX_ANGLE && state.power==ON) state.power==OFF;
+		if(state.angle<MAX_ANGLE-state.speed && state.power==OFF) state.power==ON;
+	}
+*/
 }

@@ -4,16 +4,15 @@
 #include "types.h"
 #include "project.h"
 #include "spi.h"
-extern volatile char on;
-extern volatile long int angle;
-volatile unsigned int i;
+#include "softstartstop.h"
+extern st_state state;
 /* first function that receives code for on/off the light. Never exists! */
 void legacy_receiver(){
 	//requred vars:
 	UINT8 sta;
-#define BUFFER_LENGTH 1
+	#define BUFFER_LENGTH 1
     	UINT8 g_RFSendBuff[BUFFER_LENGTH];
-
+	volatile unsigned int i;
 	SwitchToRxMode();   //Set RF to TX mode
 	UINT8 rlen;
 	for (;;)
@@ -26,33 +25,29 @@ void legacy_receiver(){
    		sta = RF_GET_STATUS();      //Get the RF status
 		if(sta & STATUS_RX_DR){    //Receive OK?
   		rlen = RF_ReadRxPayload( (UINT8 *)&g_RFSendBuff, BUFFER_LENGTH );
-		//	P2OUT ^=TRIAC;	
+
 		if((char)g_RFSendBuff[0]=='a'){
-			//P2OUT |=TRIAC;
-			on=1;
+			power_on();
 		}
 		if((char)g_RFSendBuff[0]=='b'){
-			//P2OUT &=~TRIAC;
-			on=0;
+			power_off();	
+			
 		}	
 		if((char)g_RFSendBuff[0]=='c'){
-			//P2OUT ^=TRIAC;
-			on=!on;
+			if(state.power) power_off();
+			else power_on();
 		}
-		if((char)g_RFSendBuff[0]=='1'){
-			angle=500;
-			on=1;
+		if((char)g_RFSendBuff[0]=='d'){
+			state.softstart=TRUE;
 		}
-		if((char)g_RFSendBuff[0]=='5'){
-			angle=4000;
-			on=1;
+		if((char)g_RFSendBuff[0]=='e'){
+			state.softstart=FALSE;
 		}
-			
-		if((char)g_RFSendBuff[0]=='9'){
-			angle=8000;
-			on=1;
+		
+		if((char)g_RFSendBuff[0]>'0' && (char)g_RFSendBuff[0]<'a'){
+		//49 levels
+			angle_change(154*((char)g_RFSendBuff[0]-'0')+100);
 		}
-	
 	}
 
   	if( sta & STATUS_MAX_RT )  //Send fail?
