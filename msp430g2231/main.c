@@ -50,7 +50,7 @@ volatile int i;
 	state.power=OFF; //powered off
 	state.cap=TIMERCAP; //prepare for capture mode
 	state.timer_mode=TIMERIDLE; //timer will be idle after capture happened
-	state.speed=10; //soft start/stop speed.
+	state.speed=20; //soft start/stop speed.
 	state.softstart=TRUE;
 /* Will be using interrupts for switch */
 	Interrupt_init();

@@ -15,7 +15,7 @@ void captureMode(void)
 	TACTL =TACLR; // Clear
 	TACTL = TASSEL_2 + MC_2+TAIE; // SMCLK, contmode
 	TACCTL0 = CM_1+CCIS_0+SCS+CAP+CCIE;
-  	_BIS_SR(GIE); // enable interrupt
+  //	_BIS_SR(GIE); // enable interrupt
 
 }
 
@@ -24,7 +24,7 @@ void compareMode(void)
 	state.cap=TIMERCOMP;
 	//TACTL = TASSEL_2 + MC_2+TAIE;                  // SMCLK, contmode
 	TACCTL0 = OUTMOD_4+CCIE;
-  	_BIS_SR(GIE);                 // enable interrupt
+  //	_BIS_SR(GIE);                 // enable interrupt
 	
 
 }
@@ -35,6 +35,7 @@ void compareMode(void)
 
 void Interrupt_init(void){
 //P2REN |=BIT1; //pull up resistor on P2
+	P2DIR &=~BIT7;
 	P2IE  |=BIT7; // enable interrupt on P2
 	P2IES &=~BIT7; // enable interrupt on falling edge
 	do {
@@ -46,11 +47,10 @@ void Interrupt_init(void){
 
 
 #pragma vector = PORT2_VECTOR
-__interrupt void PORT2_ISR(void) {
-//	P2OUT ^=TRIAC;
+__interrupt PORT2_ISR(void) {
 	if(state.power) power_off();
 	else power_on();
-do { //debouncing ;)
+do {
 	P2IFG=0;
 } while(P2IFG!=0);
 
@@ -89,5 +89,11 @@ __interrupt timerA(void){
 		if(state.angle>=MAX_ANGLE-state.speed && state.power==ON) state.power=OFF;
 /*		if(state.angle<MAX_ANGLE-state.speed && state.power==OFF) state.power=ON; */
 	}
-
+/*
+	if(P2IFG & BIT7){
+		if(state.power) power_off();
+		else power_on();
+		P2IFG=0;
+	}
+*/
 }
