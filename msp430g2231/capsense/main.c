@@ -29,27 +29,42 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * --/COPYRIGHT--*/
+//******************************************************************************
+// RO_PINOSC_TA0 example
+// RO method capactiance measurement using PinOsc IO and TimerA0
+//
+//          Schematic Description: 
+//
+//                         MSP430G2452
+//                      +---------------+
+//                      |
+//             C--------|P1.0
+//             C--------|P1.1
+//             C--------|P1.2
+//             C--------|P1.3
+//             C--------|P1.4
+//             C--------|P1.5
+//                      |
+//           C----------|P2.0
+//           C----------|P2.1
+//           C----------|P2.2
+//           C----------|P2.3
+//           C----------|P2.4
+//           C----------|P2.5
+//                      |
+//           C----------|P2.6
+//           C----------|P2.7
+//
+//        The measurement window is accumulation_cycles/ACLK. The ACLK is
+//        used to generate a capture event via the internal connection CCIOB. 
+//        The counts within the TA0R that have accumulated during the 
+//        measurement window represents the capacitance of the element.
+//        This peripheral configuration frees up the WDTp peripheral for other
+//        uses, but requires an active polling of the CCI0B capture event.  The
+//        polling can be replaced with an ISR to improve power consumption.
+//
+//******************************************************************************
 /*
- *  main.c
- *  In this RO_PINOSC_TA0_WDTp example, four elements are configured as 
- *  wheel.
- *
- *          Schematic Description: 
- * 
- *                         MSP430G2452
- *                      +---------------+
- *                      |
- *             C--------|P2.4
- *           C----------|P2.1
- *               C------|P2.3
- *             C--------|P2.2
- *                      |
- *
- *  The wheel is configured in strucutre.c to use the SMCLK to establish
- *  a consistent 8ms gate time.  This can be accomplished by using the 
- *  1Mhz calibration constants or the 8Mhz constants with the SMCLK 
- *  divider setting of /8 as in this example. 
- *
  *  The element and sensor definitions found in the configuration file 
  *  structure.c use designated initializer lists. This allows members to be 
  *  initialized in any order and also enhances the readability of the element
@@ -57,64 +72,36 @@
  *  This feature requires the GCC language extension found in Code Composer 
  *  Studio (CCS).  C99 is the default dialect found in IAR and therefore the 
  *  default settings can be used.
- */
-struct Element * keypressed;
+*/
 #include "CTS_Layer.h"
 #define LED BIT0
-uint16_t position;
-// uint16_t dCnt[4];
+
+#define NUM_SEN	14
+
+struct Element* keypressed;
 
 // Main Function
-uint16_t main(void)
+void main(void)
 { 
+  uint8_t i;
   WDTCTL = WDTPW + WDTHOLD;             // Stop watchdog timer
-  BCSCTL1 = CALBC1_8MHZ;                // Set DCO to 1, 8, 12 or 16MHz
-  DCOCTL = CALDCO_8MHZ;
-  BCSCTL1 |= DIVA_0;                    // ACLK/(0:1,1:2,2:4,3:8)
-  BCSCTL2 |= DIVS_3;                    // SMCLK/(0:1,1:2,2:4,3:8)
   BCSCTL3 |= LFXT1S_2;                  // LFXT1 = VLO
+ 	P1DIR|=LED; 
 
-	P1DIR|=LED;
-  // establish baseline
-  TI_CAPT_Init_Baseline(&wheel);
-  TI_CAPT_Update_Baseline(&wheel,5);
-
-  TI_CAPT_Init_Baseline(&middle_button);
-  TI_CAPT_Update_Baseline(&middle_button,5);
-
+  TI_CAPT_Init_Baseline(&keypad);
+  TI_CAPT_Update_Baseline(&keypad,5);
 
   // Main loop starts here
   while (1)
   {
-    position = TI_CAPT_Wheel(&wheel);
-	// TI_CAPT_Raw(&wheel,dCnt);
-    // TI_CAPT_Custom(&wheel,dCnt);
-    if(position != ILLEGAL_SLIDER_WHEEL_POSITION)   
-    {
-        __no_operation();
-//	if(position==12) P1OUT |=LED;
-//	else P1OUT &=~LED;
-
-    }
-
-	keypressed = (struct Element *)TI_CAPT_Buttons(&middle_button);
+    keypressed = (struct Element *)TI_CAPT_Buttons(&keypad);
 	if(keypressed)
 	{
-		    P1OUT |=LED;
-	}else{
-		 P1OUT &=~LED;
-
+ 	P1OUT |=LED;  
+	} else{
+ 	P1OUT &=~LED;  
 	}
-
-    __delay_cycles(1000); 
   }
+	__sleep_cycles(100);
 } // End Main
-
-#pragma vector= PORT2_VECTOR,PORT1_VECTOR,ADC10_VECTOR,NMI_VECTOR,          \
-                TIMER0_A1_VECTOR,COMPARATORA_VECTOR,TIMER0_A0_VECTOR
-__interrupt void ISR_trap(void)
-{
-  /* the following will cause an access violation and result in a PUC reset */
-  WDTCTL = 0;
-}
 

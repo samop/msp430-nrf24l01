@@ -31,8 +31,8 @@
  * --/COPYRIGHT--*/
 /*
  *  structure.h
- *  This example of the RO_PINOSC_TA0_WDTp implementation uses 6 elements and 
- *  three sensors.  
+ *  This example of the RO_PINOSC_TA0 implementation uses 14 elements, 
+ *  element0-D, and one sensor, keyPad.
  *
  */
 //******************************************************************************
@@ -45,25 +45,28 @@
 #include <stdint.h>
 
 /* Public Globals */
-extern const struct Element volume_down;     // structure containing elements for
-extern const struct Element volume_up;     // 
-extern const struct Element right;     // 
-extern const struct Element left;     // 
-extern const struct Element middle_element;     // 
-extern const struct Element proximity_element;     // 
-
-extern const struct Sensor wheel;
-
-extern const struct Sensor middle_button;    // structure of info for a given  
-
-extern const struct Sensor proximity_sensor;    // structure of info for a given  
+extern const struct Element element0;     // structure containing elements for
+extern const struct Element element1;     // 
+extern const struct Element element2;     // 
+extern const struct Element element3;     // 
+extern const struct Element element4;     // structure containing elements for
+extern const struct Element element5;     // 
+extern const struct Element element6;     // 
+extern const struct Element element7;     // 
+extern const struct Element element8;     // structure containing elements for
+extern const struct Element element9;     // 
+extern const struct Element elementA;     // 
+extern const struct Element elementB;     // 
+extern const struct Element elementC;     // structure containing elements for
+extern const struct Element elementD;     // 
+extern const struct Sensor keypad;
 
 //****** RAM ALLOCATION ********************************************************
 // TOTAL_NUMBER_OF_ELEMENTS represents the total number of elements used, even if 
 // they are going to be segmented into seperate groups.  This defines the 
 // RAM allocation for the baseline tracking.  If only the TI_CAPT_Raw function
 // is used, then this definition should be removed to conserve RAM space.
-#define TOTAL_NUMBER_OF_ELEMENTS 6
+#define TOTAL_NUMBER_OF_ELEMENTS 14
 // If the RAM_FOR_FLASH definition is removed, then the appropriate HEAP size 
 // must be allocated. 2 bytes * MAXIMUM_NUMBER_OF_ELEMENTS_PER_SENSOR + 2 bytes
 // of overhead.
@@ -72,7 +75,7 @@ extern const struct Sensor proximity_sensor;    // structure of info for a given
 // This defines the array size in the sensor strucure.  In the event that 
 // RAM_FOR_FLASH is defined, then this also defines the amount of RAM space
 // allocated (global variable) for computations.
-#define MAXIMUM_NUMBER_OF_ELEMENTS_PER_SENSOR  4
+#define MAXIMUM_NUMBER_OF_ELEMENTS_PER_SENSOR  14
 //****** Choosing a  Measurement Method ****************************************
 // These variables are references to the definitions found in structure.c and
 // must be generated per the application.
@@ -80,8 +83,8 @@ extern const struct Sensor proximity_sensor;    // structure of info for a given
 
 // OSCILLATOR DEFINITIONS
 //#define RO_COMPAp_TA0_WDTp  		64
-#define RO_PINOSC_TA0_WDTp  		65
-//#define RO_PINOSC_TA0       		66
+//#define RO_PINOSC_TA0_WDTp  		65
+#define RO_PINOSC_TA0       		66
 //#define RO_COMPAp_TA1_WDTp  		67
 //#define RO_COMPB_TA0_WDTA			68
 //#define RO_COMPB_TA1_WDTA         69
@@ -118,8 +121,8 @@ extern const struct Sensor proximity_sensor;    // structure of info for a given
 //****** WHEEL and SLIDER ******************************************************
 // Are wheel or slider representations used?
 //#define SLIDER
-#define ILLEGAL_SLIDER_WHEEL_POSITION		0xFFFF
-#define WHEEL
+//#define ILLEGAL_SLIDER_WHEEL_POSITION		0xFFFF
+//#define WHEEL
 
 //******************************************************************************
 // End of user configuration section.

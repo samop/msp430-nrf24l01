@@ -30,132 +30,57 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * --/COPYRIGHT--*/
 //******************************************************************************
-//  RO_PINOSC_TA_WDTp example with the MSP430G2452
-//  threshold and maxResponse values must be updated for electrode design,
-//  system clock settings, selection of gate measurement source, and 
-//  accumulation cycles
+//
+//                         MSP430G2452
+//                      +---------------+
+//                      |
+//             C--------|P1.0
+//             C--------|P1.1
+//             C--------|P1.2
+//             C--------|P1.3
+//             C--------|P1.4
+//             C--------|P1.5
+//                      |
+//           C----------|P2.0
+//           C----------|P2.1
+//           C----------|P2.2
+//           C----------|P2.3
+//           C----------|P2.4
+//           C----------|P2.5
+//                      |
+//           C----------|P2.6
+//           C----------|P2.7
+//
 //******************************************************************************
 
 #include "structure.h"
 
-//PinOsc Volume down P2.2
-const struct Element volume_down = {
+//PinOsc P1.0
 
-              .inputPxselRegister = (unsigned char *)&P2SEL,  
-              .inputPxsel2Register = (unsigned char *)&P2SEL2,  
-              .inputBits = BIT2,
-              // measured for a 1Mhz SMCLK
-              .maxResponse = 121+655, // actual measure was 980
+const struct Element elementB = {
+
+              .inputPxselRegister = (uint8_t *)&P2SEL,  
+              .inputPxsel2Register = (uint8_t *)&P2SEL2,  
+              .inputBits = BIT5,
+              .maxResponse = 121+655, 
               .threshold = 121 
 
-};      
+};  
 
-//PinOsc forward right P2.3
-const struct Element right = {
 
-              .inputPxselRegister = (unsigned char *)&P2SEL,  
-              .inputPxsel2Register = (unsigned char *)&P2SEL2,  
-              .inputBits = BIT3,
-              // 1Mhz SMCLK
-              .maxResponse = 113+655,
-              .threshold = 113 
-};
-
-//PinOsc Volume up, P2.4
-const struct Element volume_up = {
-
-              .inputPxselRegister = (unsigned char *)&P2SEL,  
-              .inputPxsel2Register = (unsigned char *)&P2SEL2,  
-              .inputBits = BIT4,
-              // 1Mhz SMCLK
-              .maxResponse = 118+655,
-              .threshold = 118 
-};      
-
-//PinOsc reverse left P2.1
-const struct Element left = {
-
-              .inputPxselRegister = (unsigned char *)&P2SEL,  
-              .inputPxsel2Register = (unsigned char *)&P2SEL2,  
-              .inputBits = BIT1,
-              // 1Mhz SMCLK
-              .maxResponse = 111+655,
-              .threshold = 111 
-};      
-
-//PinOsc Wheel: middle button P2.5
-const struct Element middle_element = {
-
-              .inputPxselRegister = (unsigned char *)&P2SEL,  
-              .inputPxsel2Register = (unsigned char *)&P2SEL2,  
-              .inputBits = BIT5,
-              // When using an abstracted function to measure the element
-              // the 100*(maxResponse - threshold) < 0xFFFF
-              // ie maxResponse - threshold < 655
-              .maxResponse = 1055+1055,
-              .threshold = 1055 
-}; 
-
-//PinOsc proximity: P2.0
-const struct Element proximity_element = {
-
-              .inputPxselRegister = (unsigned char *)&P2SEL,  
-              .inputPxsel2Register = (unsigned char *)&P2SEL2,  
-              .inputBits = BIT0,
-              .maxResponse = 200,
-              .threshold = 130 
-};      
-
-//*** Sensor   *******************************************************/
+//*** Sensor     *******************************************************/
 // This defines the grouping of sensors, the method to measure change in
 // capacitance, and the function of the group
 
-const struct Sensor wheel =
+const struct Sensor keypad =
                { 
-                  .halDefinition = RO_PINOSC_TA0_WDTp,
-                  .numElements = 4,
-                  .points = 16,
-                  .sensorThreshold = 75,
+                  .halDefinition = RO_PINOSC_TA0,
+                  .numElements = 1,
                   .baseOffset = 0,
-                  // Pointer to elements
-                  .arrayPtr[0] = &volume_up,  // point to first element
-                  .arrayPtr[1] = &right,  // point to first element
-                  .arrayPtr[2] = &volume_down,  // point to first element
-                  .arrayPtr[3] = &left,  // point to first element
-                  // Timer Information
-                  .measGateSource= GATE_WDT_SMCLK,     //  0->SMCLK, 1-> ACLK
-                  //.accumulationCycles= WDTp_GATE_32768             //32768
-                  .accumulationCycles= WDTp_GATE_8192               // 8192
-                  //.accumulationCycles= WDTp_GATE_512             //512
-                  //.accumulationCycles= WDTp_GATE_64             //64                  
-               };
+                  // Pointers to elements
+                  .arrayPtr[0] = &elementB,  
+ 
 
-const struct Sensor middle_button =
-               { 
-                  .halDefinition = RO_PINOSC_TA0_WDTp,
-                  .numElements = 1,
-                  .baseOffset = 5,
-                  // Pointer to elements
-                  .arrayPtr[0] = &middle_element,  // point to first element
                   // Timer Information
-                  .measGateSource= GATE_WDT_SMCLK,     //  0->SMCLK, 1-> ACLK
-                  //.accumulationCycles= WDTp_GATE_32768             //32768
-                  .accumulationCycles= WDTp_GATE_8192               // 8192
-                  //.accumulationCycles= WDTp_GATE_512             //512
-                  //.accumulationCycles= WDTp_GATE_64             //64                  
-               };
-
-const struct Sensor proximity_sensor =
-               { 
-                  .halDefinition = RO_PINOSC_TA0_WDTp,
-                  .numElements = 1,
-                  .baseOffset = 5,
-                  // Pointer to elements
-                  .arrayPtr[0] = &proximity_element,  // point to first element
-                  // Timer Information
-                  .measGateSource= GATE_WDT_SMCLK,     //  0->SMCLK, 1-> ACLK
-                  //.accumulationCycles= WDTp_GATE_32768             //32768
-                  .accumulationCycles= WDTp_GATE_8192               // 8192
-                  //.accumulationCycles= WDTp_GATE_512             //512
-                  //.accumulationCycles= WDTp_GATE_64             //64                  
+                  .accumulationCycles= 100   //number of ACLK cycles              
                };
