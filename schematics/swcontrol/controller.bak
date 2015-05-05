@@ -442,4 +442,65 @@ Text GLabel 8300 1050 0    60   Input ~ 0
 INT
 Wire Wire Line
 	8350 1050 8300 1050
+$Comp
+L CONN_01X08 P?
+U 1 1 55486003
+P 8850 3150
+F 0 "P?" H 8850 3600 50  0000 C CNN
+F 1 "miniTransceiver (1.25 raster)" V 8950 3150 50  0000 C CNN
+F 2 "" H 8850 3150 60  0000 C CNN
+F 3 "" H 8850 3150 60  0000 C CNN
+	1    8850 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3V3 #PWR?
+U 1 1 55486133
+P 8550 2800
+F 0 "#PWR?" H 8550 2650 60  0001 C CNN
+F 1 "+3V3" H 8550 2940 60  0000 C CNN
+F 2 "" H 8550 2800 60  0000 C CNN
+F 3 "" H 8550 2800 60  0000 C CNN
+	1    8550 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 5548615C
+P 8550 2900
+F 0 "#PWR?" H 8550 2650 60  0001 C CNN
+F 1 "GND" H 8550 2750 60  0000 C CNN
+F 2 "" H 8550 2900 60  0000 C CNN
+F 3 "" H 8550 2900 60  0000 C CNN
+	1    8550 2900
+	0    1    1    0   
+$EndComp
+Text GLabel 8550 3000 0    60   Input ~ 0
+CE
+Text GLabel 8550 3100 0    60   Input ~ 0
+CSN
+Text GLabel 8550 3200 0    60   Input ~ 0
+SCK
+Text GLabel 8550 3300 0    60   Input ~ 0
+MOSI
+Text GLabel 8550 3400 0    60   Input ~ 0
+MISO
+Text GLabel 8550 3500 0    60   Input ~ 0
+INT
+Wire Wire Line
+	8550 3000 8650 3000
+Wire Wire Line
+	8550 3100 8650 3100
+Wire Wire Line
+	8550 3200 8650 3200
+Wire Wire Line
+	8550 3300 8650 3300
+Wire Wire Line
+	8550 3400 8650 3400
+Wire Wire Line
+	8550 3500 8650 3500
+Wire Wire Line
+	8550 2900 8650 2900
+Wire Wire Line
+	8550 2800 8650 2800
 $EndSCHEMATC
