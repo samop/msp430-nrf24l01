@@ -14,8 +14,8 @@ void main(void)
 
   BCSCTL3 |= LFXT1S_2;                  // LFXT1 = VLO
  	P1DIR|=LED; 
-
-/*BCSCTL1 = CALBC1_1MHZ;
+/*
+BCSCTL1 = CALBC1_1MHZ;
 	DCOCTL = CALDCO_1MHZ;
 	BCSCTL2 |= DIVS_2;
 */
@@ -33,6 +33,5 @@ void main(void)
  	P1OUT &=~LED;  
 	}
   }
-	__sleep_cycles(100);
 } // End Main
 
