@@ -93,7 +93,7 @@ extern const struct Sensor keypad;
 //#define RO_PINOSC_TA0_TA1         72
 //#define RO_CSIO_TA2_WDTA			73
 //#define RO_CSIO_TA2_TA3           74
-//#define RO_PINOSC_TA1_WDTp  		75
+/////#define RO_PINOSC_TA1_WDTp  		75
 //#define RO_PINOSC_TA1_TB0			76
 //#define RO_CSIO_TA0_WDTA          77
 //#define RO_CSIO_TA0_TA1           78
