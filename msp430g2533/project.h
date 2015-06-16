@@ -1,7 +1,7 @@
 #ifndef _H_PROJECT
 #define _H_PROJECT
 
-//#define BK2421 //Enable if using BK2421 chip instead of nRF24lXX
+#define BK2421 //Enable if using BK2421 chip instead of nRF24lXX
 #define TRIAC BIT6 //P2.6
 #define ZEROCROSS BIT1 //P1.1
 

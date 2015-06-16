@@ -2,7 +2,6 @@
 #include "spi.h"
 //#include <avr/pgmspace.h>
 //#include "bsp.h"
-#include "msp430g2533.h"
 
 #define BANK0_REG_LIST_CNT			21
 #define BANK0_REGACT_LIST_CNT		2
@@ -243,15 +242,6 @@ void BK2421_Initialize()
 
     if( i == 0 ) // i!=0 showed that chip has been actived.so do not active again.
     {
-        SPI_Write_Reg( ACTIVATE_CMD, 0x73 );// Active
-    }
-
-
-    i = SPI_Read_Reg( 29 );
-
-    if( i == 0 ) // i!=0 showed that chip has been actived.so do not active again.
-    {
-	P1OUT&=~BIT0;
         SPI_Write_Reg( ACTIVATE_CMD, 0x73 );// Active
     }
 

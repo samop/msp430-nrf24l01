@@ -32,9 +32,7 @@ volatile int i;
 /* P1.4 : CSN */
 	P1DIR |=CE+CSN;                             //P1.5 is SCLK, P1.6 = SDO, P1.7 = SDI, P1.6=CS, P1.0 = LED
 	P1DIR|=BIT0;
-	P1OUT|=BIT0;
-
-
+	P1OUT&=~BIT0;
 	SPI_Init();
 /* Initialize RF module */
 	BK2421_Initialize();
@@ -61,6 +59,7 @@ volatile int i;
 //	captureMode();
 	legacy_receiver(); //never returns!
 
+	
 /* endless loop, just in case */
 	while(1);
 }
@@ -68,9 +67,10 @@ volatile int i;
 void SPI_Init(void)
 {
 	UCB0CTL1|=UCSWRST;
-	UCB0CTL0=UCCKPH+UCMST;
-	UCB0CTL1|=UCSSEL1; //clock choice
-	UCB0BR0=64; //clock prescaler
+	UCB0CTL0=UCCKPH+UCMST+UCMSB+UCSYNC;
+	UCB0CTL1|=UCSSEL0+UCSSEL1; //clock choice
+	UCB0BR0=4; //clock prescaler
+	UCB0BR1=0; //clock prescaler
 	P1SEL|=BIT5+BIT6+BIT7;
 	P1SEL2|=BIT5+BIT6+BIT7;
 	UCB0CTL1&=~UCSWRST;
