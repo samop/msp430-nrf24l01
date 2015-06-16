@@ -55,8 +55,8 @@ volatile int i;
 	state.speed=20; //soft start/stop speed.
 	state.softstart=TRUE;
 /* Will be using interrupts for switch */
-//	Interrupt_init();
-//	captureMode();
+	Interrupt_init();
+	captureMode();
 	legacy_receiver(); //never returns!
 
 	

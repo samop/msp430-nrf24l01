@@ -34,9 +34,9 @@ void legacy_receiver(){
 			
 		}	
 		if((char)g_RFSendBuff[0]=='c'){
-			//if(state.power) power_off();
-			//else power_on();
-			P1OUT^=BIT0;
+			if(state.power) power_off();
+			else power_on();
+			//P1OUT^=BIT0;
 			
 		}
 		if((char)g_RFSendBuff[0]=='d'){
