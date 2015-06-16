@@ -55,6 +55,7 @@ void legacy_receiver(){
 		
 		if((char)g_RFSendBuff[0]>'0' && (char)g_RFSendBuff[0]<'a'){
 		//49 levels
+			P1OUT^=BIT0;
 			angle_change(154*((char)g_RFSendBuff[0]-'0')+100);
 		}
 	}

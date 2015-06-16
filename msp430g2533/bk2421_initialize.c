@@ -2,12 +2,14 @@
 #include "spi.h"
 //#include <avr/pgmspace.h>
 //#include "bsp.h"
+#include "msp430g2533.h"
 
 #define BANK0_REG_LIST_CNT			21
 #define BANK0_REGACT_LIST_CNT		2
 
 /*Bank1 register initialization value*/
 //Reg0 to Reg13
+#ifdef BK2421
 const UINT32 Bank1_Reg0_13[]={
 0xE2014B40,
 0x00004BC0,
@@ -30,6 +32,7 @@ const UINT8 Bank1_Reg14[]=
 {
 0x41,0x20,0x08,0x04,0x81,0x20,0xCF,0xF7,0xFE,0xFF,0xFF
 };
+#endif
 
 /*Bank0 register initialization value*/
 const UINT8 Bank0_Reg[BANK0_REG_LIST_CNT][2]={
@@ -243,6 +246,17 @@ void BK2421_Initialize()
         SPI_Write_Reg( ACTIVATE_CMD, 0x73 );// Active
     }
 
+
+    i = SPI_Read_Reg( 29 );
+
+    if( i == 0 ) // i!=0 showed that chip has been actived.so do not active again.
+    {
+	P1OUT&=~BIT0;
+        SPI_Write_Reg( ACTIVATE_CMD, 0x73 );// Active
+    }
+
+
+
     for( i = (BANK0_REGACT_LIST_CNT - 1); i >= 0; i-- )
     {
         SPI_Write_Reg( (WRITE_REG | Bank0_RegAct[i][0]), Bank0_RegAct[i][1] );
@@ -250,7 +264,7 @@ void BK2421_Initialize()
         SPI_Read_Reg( (Bank0_RegAct[i][0]) );
     }
 
-
+#ifdef BK2421
 //********************Write Bank1 register******************
     SwitchCFG(1);
 
@@ -292,6 +306,7 @@ void BK2421_Initialize()
 
 //********************switch back to Bank0 register access******************
     SwitchCFG( 0 );
+#endif
 
     SwitchToRxMode();//switch to RX mode
 

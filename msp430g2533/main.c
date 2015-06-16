@@ -33,6 +33,8 @@ volatile int i;
 	P1DIR |=CE+CSN;                             //P1.5 is SCLK, P1.6 = SDO, P1.7 = SDI, P1.6=CS, P1.0 = LED
 	P1DIR|=BIT0;
 	P1OUT|=BIT0;
+
+
 	SPI_Init();
 /* Initialize RF module */
 	BK2421_Initialize();
@@ -55,10 +57,8 @@ volatile int i;
 	state.speed=20; //soft start/stop speed.
 	state.softstart=TRUE;
 /* Will be using interrupts for switch */
-	Interrupt_init();
-
-	captureMode();
-
+//	Interrupt_init();
+//	captureMode();
 	legacy_receiver(); //never returns!
 
 /* endless loop, just in case */
@@ -80,8 +80,8 @@ void SPI_Init(void)
 //  USICKCTL = USIDIV_4 + USISSEL_2;// + USICKPL;          // Setup USI clocks: SCLK = SMCLK/2
 //  USICTL0 &= ~USISWRST;                     // Enable USI i.e release reset
 
-  P1OUT &= ~0x10; //enable slave!
-  P1OUT &= ~0x08; // /CE  to power on chip
+  P1OUT &= ~CSN; //enable slave!
+  P1OUT &= ~CE; // /CE  to power on chip
 }
 
 

@@ -1,6 +1,6 @@
 #include "spi.h"
 #include "msp430g2533.h"
-
+#include "project.h"
 /*****************************************************************************************
 Function:       UINT8 SPI_Write( UINT8 reg )
 Parameter: 
@@ -119,18 +119,18 @@ void SPI_Write_Buf(UINT8 reg, UINT8 *pBuffer, UINT8 Length)
 }
 
 void CLR_CSN(){
-P1OUT &= ~0x10; //enable slave by clearing!
+P1OUT &= ~CSN; //enable slave by clearing!
 
 }
 
 void SET_CSN(){
-P1OUT |= 0x10;
+P1OUT |= CSN;
 }
 
 void CLR_CE(){
-P1OUT &=~0x08;
+P1OUT &=~CE;
 }
 
 void SET_CE(){
-P1OUT |=0x08;
+P1OUT |=CE;
 }
